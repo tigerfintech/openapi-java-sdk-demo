@@ -4,11 +4,19 @@ import com.tigerbrokers.stock.openapi.client.constant.ApiServiceType;
 import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
 import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
 import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
-
+import com.tigerbrokers.stock.openapi.client.struct.enums.Currency;
+import com.tigerbrokers.stock.openapi.client.struct.enums.Market;
+import com.tigerbrokers.stock.openapi.client.struct.enums.OrderStatus;
+import com.tigerbrokers.stock.openapi.client.struct.enums.SecType;
 import com.tigerbrokers.stock.openapi.client.util.builder.AccountParamBuilder;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.*;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerPubKey;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
@@ -19,10 +27,81 @@ public class AccountDemo {
   private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey, tigerPubKey);
 
   @Test
+  public void queryContract() {
+    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.CONTRACT);
+    String bizContent = AccountParamBuilder.instance()
+        .account("DU575569")
+        .conid("42451645")
+        .buildJson();
+    request.setBizContent(bizContent);
+
+    TigerHttpResponse response = client.execute(request);
+    outputResponse(bizContent, response);
+  }
+
+  @Test
   public void queryAccount() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ACCOUNTS);
     String bizContent = AccountParamBuilder.instance()
+        .account("DU575569")
+        .buildJson();
+    request.setBizContent(bizContent);
+
+    TigerHttpResponse response = client.execute(request);
+    outputResponse(bizContent, response);
+  }
+
+  @Test
+  public void queryAsset() {
+    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ASSETS);
+    String bizContent = AccountParamBuilder.instance()
+        .account("DU575569")
+        .buildJson();
+    request.setBizContent(bizContent);
+
+    TigerHttpResponse response = client.execute(request);
+    outputResponse(bizContent, response);
+  }
+
+  @Test
+  public void queryPosition() {
+    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.POSITIONS);
+    List<String> subAccounts = new ArrayList<>();
+    subAccounts.add("DU1003981");
+    subAccounts.add("DU1003980");
+    String bizContent = AccountParamBuilder.instance()
         .account("DF1003979")
+        .currency(Currency.USD)
+        .market(Market.US)
+        .symbol("AAPL")
+        .secType(SecType.STK)
+        .subAccounts(subAccounts)
+        .buildJson();
+    request.setBizContent(bizContent);
+
+    TigerHttpResponse response = client.execute(request);
+    outputResponse(bizContent, response);
+  }
+
+
+  @Test
+  public void getOrders() {
+    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ORDERS);
+    List<String> states = new ArrayList<>();
+    states.add(OrderStatus.Inactive.name());
+    states.add(OrderStatus.Cancelled.name());
+    List<String> subs = new ArrayList<>();
+    subs.add("DU1003980");
+
+    String bizContent = AccountParamBuilder.instance()
+        .account("DF1003979")
+        .subAccounts(subs)
+        .startDate("2018-07-21")
+        .endDate("2018-07-28")
+        .secType(SecType.STK)
+        .market(Market.US)
+        .states(states)
+        .isBrief(false)
         .buildJson();
     request.setBizContent(bizContent);
 

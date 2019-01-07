@@ -7,6 +7,7 @@ import com.tigerbrokers.stock.openapi.client.struct.enums.Subject;
 import com.tigerbrokers.stock.openapi.demo.DefaultApiComposeCallback;
 import java.util.HashSet;
 import java.util.Set;
+import org.junit.Test;
 
 import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
 import static com.tigerbrokers.stock.openapi.demo.DemoConstants.webSocketServerUrl;
@@ -18,23 +19,45 @@ import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
  */
 public class WebSocketDemo {
 
-  public static void main(String[] args) {
+  private WebSocketClient client;
 
+  public WebSocketDemo() {
     ApiAuthentication authentication = ApiAuthentication.build(tigerId, yourPrivateKey);
     ApiComposeCallback callback = new DefaultApiComposeCallback();
-    WebSocketClient client = new WebSocketClient(webSocketServerUrl, authentication, callback);
+    client = new WebSocketClient(webSocketServerUrl, authentication, callback);
 
     client.connect();
+  }
 
+  @Test
+  public void subscribeAsset() {
     client.subscribe(Subject.Asset);
-    client.subscribe(Subject.Position);
-    client.subscribe(Subject.OrderStatus);
+  }
 
+  @Test
+  public void subscribePosition() {
+    client.subscribe(Subject.Position);
+  }
+
+  @Test
+  public void subscribeOrderStatus() {
+    client.subscribe(Subject.OrderStatus);
+  }
+
+  @Test
+  public void subscribeQuote() {
     Set<String> symbols = new HashSet<>();
     symbols.add("AAPL");
     symbols.add("GOOG");
     symbols.add("00700");
     symbols.add("02318");
     client.subscribeQuote(symbols);
+  }
+
+  @Test
+  public void subscribeOption() {
+    Set<String> symbols = new HashSet<>();
+    symbols.add("AMD 20181221 17.0 PUT");
+    client.subscribeOption(symbols);
   }
 }
