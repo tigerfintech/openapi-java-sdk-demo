@@ -11,8 +11,12 @@ import com.tigerbrokers.stock.openapi.client.struct.enums.TimeLineType;
 import com.tigerbrokers.stock.openapi.client.util.builder.QuoteParamBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Test;
 
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.*;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerPubKey;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
@@ -22,19 +26,7 @@ public class QuoteDemo {
 
   private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey, tigerPubKey);
 
-  public static void main(String[] args) {
-    QuoteDemo quoteDemo = new QuoteDemo();
-    quoteDemo.getMarket();
-    quoteDemo.allSymbols();
-    quoteDemo.allSymbolNames();
-    quoteDemo.getStockBrief();
-    quoteDemo.getStockDetail();
-    quoteDemo.getTimeline();
-    quoteDemo.getHourTradingTimeline();
-    quoteDemo.getKline();
-    quoteDemo.getTradeTick();
-  }
-
+  @Test
   public void getMarket() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.MARKET_STATE);
     String bizContent = QuoteParamBuilder.instance()
@@ -46,6 +38,7 @@ public class QuoteDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void allSymbols() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ALL_SYMBOLS);
 
@@ -58,6 +51,7 @@ public class QuoteDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void allSymbolNames() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ALL_SYMBOL_NAMES);
 
@@ -71,6 +65,7 @@ public class QuoteDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void getStockBrief() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.BRIEF);
 
@@ -86,6 +81,7 @@ public class QuoteDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void getStockDetail() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.STOCK_DETAIL);
 
@@ -103,6 +99,7 @@ public class QuoteDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void getTimeline() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.TIMELINE);
 
@@ -119,6 +116,7 @@ public class QuoteDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void getHourTradingTimeline() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.HOUR_TRADING_TIMELINE);
 
@@ -134,6 +132,7 @@ public class QuoteDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void getKline() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.KLINE);
 
@@ -151,6 +150,7 @@ public class QuoteDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void getTradeTick() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.TRADE_TICK);
 

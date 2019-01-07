@@ -5,6 +5,7 @@ import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
 import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
 import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
 import com.tigerbrokers.stock.openapi.client.util.builder.AccountParamBuilder;
+import org.junit.Test;
 
 import static com.tigerbrokers.stock.openapi.demo.DemoConstants.*;
 
@@ -16,11 +17,7 @@ public class ContractDemo {
 
   private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey, tigerPubKey);
 
-  public static void main(String[] args) {
-    ContractDemo contractDemo = new ContractDemo();
-    contractDemo.queryContract();
-  }
-
+  @Test
   public void queryContract() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.CONTRACT);
     String bizContent = AccountParamBuilder.instance()

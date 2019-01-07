@@ -1,12 +1,16 @@
 package com.tigerbrokers.stock.openapi.demo.trade;
 
-import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
 import com.tigerbrokers.stock.openapi.client.constant.ApiServiceType;
+import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
 import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
 import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
 import com.tigerbrokers.stock.openapi.client.util.builder.AccountParamBuilder;
+import org.junit.Test;
 
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.*;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerPubKey;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
@@ -16,11 +20,7 @@ public class AssetDemo {
 
   private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey, tigerPubKey);
 
-  public static void main(String[] args) {
-    AssetDemo assetDemo = new AssetDemo();
-    assetDemo.queryAsset();
-  }
-
+  @Test
   public void queryAsset() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ASSETS);
     String bizContent = AccountParamBuilder.instance()

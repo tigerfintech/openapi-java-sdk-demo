@@ -1,15 +1,15 @@
 package com.tigerbrokers.stock.openapi.demo.trade;
 
 import com.alibaba.fastjson.JSON;
+import com.tigerbrokers.stock.openapi.client.constant.ApiServiceType;
 import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
+import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
+import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
 import com.tigerbrokers.stock.openapi.client.struct.TagValue;
 import com.tigerbrokers.stock.openapi.client.struct.enums.ActionType;
-import com.tigerbrokers.stock.openapi.client.constant.ApiServiceType;
 import com.tigerbrokers.stock.openapi.client.struct.enums.Currency;
 import com.tigerbrokers.stock.openapi.client.struct.enums.Market;
 import com.tigerbrokers.stock.openapi.client.struct.enums.OrderType;
-import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
-import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
 import com.tigerbrokers.stock.openapi.client.struct.enums.SecType;
 import com.tigerbrokers.stock.openapi.client.struct.enums.TimeInForce;
 import com.tigerbrokers.stock.openapi.client.struct.param.OrderParameter;
@@ -17,8 +17,12 @@ import com.tigerbrokers.stock.openapi.client.util.StringUtils;
 import com.tigerbrokers.stock.openapi.client.util.builder.TradeParamBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Test;
 
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.*;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerPubKey;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
@@ -28,37 +32,8 @@ public class TradeDemo {
 
   private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey, tigerPubKey);
 
-  public static void main(String[] args) {
-    //获取订单号
-    int orderNo = getOrderNo();
-    TradeDemo tradeDemo = new TradeDemo();
-    //美股
-    tradeDemo.placeUSStockOrder(orderNo);
-    //港股
-    tradeDemo.placeHKStockOrder(orderNo);
-    //A股
-    tradeDemo.placeAStockOrder(orderNo);
-    //期权
-    tradeDemo.placeOptionOrder(orderNo);
-    //算法
-    tradeDemo.placeAlgoOrder(orderNo);
-    //外汇
-    tradeDemo.placeCashOrder(orderNo);
-    //窝轮
-    tradeDemo.placeWarOrder(orderNo);
-    //沪港通\深港通
-    tradeDemo.placeConnectStockOrder(orderNo);
-    //期货
-    tradeDemo.placeFutOrder(orderNo);
-    //批量订单
-    tradeDemo.batchPlaceOrder(orderNo);
-    //修改订单
-    tradeDemo.modifyOrder();
-    //取消订单
-    tradeDemo.cancelOrder();
-  }
-
-  public static int getOrderNo() {
+  @Test
+  public int getOrderNo() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ORDER_NO);
     String bizContent = TradeParamBuilder.instance().account("DU575569").buildJson();
     request.setBizContent(bizContent);
@@ -69,12 +44,13 @@ public class TradeDemo {
     throw new RuntimeException("获取订单号失败:" + response.getMessage());
   }
 
-  public void placeOptionOrder(int orderNo) {
+  @Test
+  public void placeOptionOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     String bizContent = TradeParamBuilder.instance()
         .account("DU575569")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("AAPL")
         .secType(SecType.OPT)
         .market(Market.US)
@@ -96,12 +72,13 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void placeWarOrder(int orderNo) {
+  @Test
+  public void placeWarOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     String bizContent = TradeParamBuilder.instance()
         .account("DU575569")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("00823")
         .secType(SecType.WAR)
         .market(Market.HK)
@@ -122,12 +99,13 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void placeUSStockOrder(int orderNo) {
+  @Test
+  public void placeUSStockOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     String bizContent = TradeParamBuilder.instance()
         .account("DU575569")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("AAPL")
         .secType(SecType.STK)
         .market(Market.US)
@@ -144,12 +122,13 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void placeHKStockOrder(int orderNo) {
+  @Test
+  public void placeHKStockOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     String bizContent = TradeParamBuilder.instance()
         .account("DU575569")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("00700")
         .secType(SecType.STK)
         .market(Market.HK)
@@ -166,12 +145,13 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void placeConnectStockOrder(int orderNo) {
+  @Test
+  public void placeConnectStockOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     String bizContent = TradeParamBuilder.instance()
         .account("DU575569")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("600016")
         .secType(SecType.STK)
         .market(Market.CN)
@@ -189,12 +169,13 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void placeFutOrder(int orderNo) {
+  @Test
+  public void placeFutOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     String bizContent = TradeParamBuilder.instance()
         .account("DU575569")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("NG")
         .secType(SecType.FUT)
         .market(Market.US)
@@ -215,12 +196,13 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void placeAStockOrder(int orderNo) {
+  @Test
+  public void placeAStockOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     String bizContent = TradeParamBuilder.instance()
         .account("DU575569")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("600016")
         .secType(SecType.STK)
         .market(Market.CN)
@@ -237,7 +219,8 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void placeAlgoOrder(int orderNo) {
+  @Test
+  public void placeAlgoOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     List<String> accounts = new ArrayList<>();
@@ -253,7 +236,7 @@ public class TradeDemo {
 
     String bizContent = TradeParamBuilder.instance()
         .account("DF1003979")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("AAPL")
         .allocAccounts(accounts)
         .allocShares(shares)
@@ -273,12 +256,13 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void placeCashOrder(int orderNo) {
+  @Test
+  public void placeCashOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
 
     String bizContent = TradeParamBuilder.instance()
         .account("DU575569")
-        .orderId(orderNo)
+        .orderId(getOrderNo())
         .symbol("USD")
         .secType(SecType.CASH)
         .currency(Currency.HKD)
@@ -295,6 +279,7 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void cancelOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.CANCEL_ORDER);
     String bizContent = TradeParamBuilder.instance()
@@ -307,6 +292,7 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
+  @Test
   public void modifyOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.MODIFY_ORDER);
     String bizContent = TradeParamBuilder.instance()
@@ -323,13 +309,14 @@ public class TradeDemo {
     outputResponse(bizContent, response);
   }
 
-  public void batchPlaceOrder(int orderNo) {
+  @Test
+  public void batchPlaceOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.BATCH_PLACE_ORDER);
     List<OrderParameter> parameterList = new ArrayList<>();
     for (int i = 0; i < 2; i++) {
       OrderParameter orderParameter = TradeParamBuilder.instance()
           .account("DU575569")
-          .orderId(i == 0 ? orderNo : 0)
+          .orderId(i == 0 ? getOrderNo() : 0)
           .symbol("AAPL")
           .secType(SecType.STK)
           .market(Market.US)

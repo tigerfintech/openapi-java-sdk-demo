@@ -1,7 +1,7 @@
 package com.tigerbrokers.stock.openapi.demo.trade;
 
-import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
 import com.tigerbrokers.stock.openapi.client.constant.ApiServiceType;
+import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
 import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
 import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
 import com.tigerbrokers.stock.openapi.client.struct.enums.Currency;
@@ -10,8 +10,12 @@ import com.tigerbrokers.stock.openapi.client.struct.enums.SecType;
 import com.tigerbrokers.stock.openapi.client.util.builder.AccountParamBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Test;
 
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.*;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerPubKey;
+import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
@@ -21,11 +25,7 @@ public class PositionDemo {
 
   private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey, tigerPubKey);
 
-  public static void main(String[] args) {
-    PositionDemo positionDemo = new PositionDemo();
-    positionDemo.queryPosition();
-  }
-
+  @Test
   public void queryPosition() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.POSITIONS);
     List<String> subAccounts = new ArrayList<>();
