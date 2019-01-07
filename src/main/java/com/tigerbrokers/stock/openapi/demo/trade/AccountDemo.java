@@ -66,16 +66,13 @@ public class AccountDemo {
   @Test
   public void queryPosition() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.POSITIONS);
-    List<String> subAccounts = new ArrayList<>();
-    subAccounts.add("DU1003981");
-    subAccounts.add("DU1003980");
+
     String bizContent = AccountParamBuilder.instance()
-        .account("DF1003979")
+        .account("DU575569")
         .currency(Currency.USD)
         .market(Market.US)
         .symbol("AAPL")
         .secType(SecType.STK)
-        .subAccounts(subAccounts)
         .buildJson();
     request.setBizContent(bizContent);
 
@@ -83,21 +80,17 @@ public class AccountDemo {
     outputResponse(bizContent, response);
   }
 
-
   @Test
   public void getOrders() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ORDERS);
     List<String> states = new ArrayList<>();
-    states.add(OrderStatus.Inactive.name());
-    states.add(OrderStatus.Cancelled.name());
-    List<String> subs = new ArrayList<>();
-    subs.add("DU1003980");
+    states.add(OrderStatus.Submitted.name());
+    states.add(OrderStatus.Filled.name());
 
     String bizContent = AccountParamBuilder.instance()
-        .account("DF1003979")
-        .subAccounts(subs)
+        .account("DU575569")
         .startDate("2018-07-21")
-        .endDate("2018-07-28")
+        .endDate("2018-11-28")
         .secType(SecType.STK)
         .market(Market.US)
         .states(states)

@@ -283,7 +283,7 @@ public class TradeDemo {
   public void cancelOrder() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.CANCEL_ORDER);
     String bizContent = TradeParamBuilder.instance()
-        .account("DF1003979")
+        .account("DU575569")
         .orderId(1000042974)
         .buildJson();
     request.setBizContent(bizContent);
