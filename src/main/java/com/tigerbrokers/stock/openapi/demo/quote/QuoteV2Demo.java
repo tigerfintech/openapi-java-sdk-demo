@@ -6,6 +6,7 @@ import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteKlineReque
 import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteMarketRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteRealTimeQuoteRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteShortableStockRequest;
+import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteStockTradeRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteSymbolNameRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteSymbolRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteTimelineRequest;
@@ -15,6 +16,7 @@ import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteKlineResp
 import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteMarketResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteRealTimeQuoteResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteShortableStockResponse;
+import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteStockTradeResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteSymbolNameResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteSymbolResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteTimelineResponse;
@@ -141,6 +143,19 @@ public class QuoteV2Demo {
     QuoteShortableStockResponse response = client.execute(QuoteShortableStockRequest.newRequest(symbols));
     if (response.isSuccess()) {
       System.out.println(Arrays.toString(response.getShortableStockItems().toArray()));
+    } else {
+      System.out.println("response error:" + response.getMessage());
+    }
+  }
+
+  @Test
+  public void quote_stock_trade() {
+    List<String> symbols = new ArrayList<>();
+    symbols.add("00700");
+    symbols.add("00810");
+    QuoteStockTradeResponse response = client.execute(QuoteStockTradeRequest.newRequest(symbols));
+    if (response.isSuccess()) {
+      System.out.println(Arrays.toString(response.getStockTradeItems().toArray()));
     } else {
       System.out.println("response error:" + response.getMessage());
     }

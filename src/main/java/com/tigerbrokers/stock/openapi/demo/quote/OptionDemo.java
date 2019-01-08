@@ -33,7 +33,7 @@ public class OptionDemo {
   private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey);
 
   @Test
-  public void getOptionExpiration() {
+  public void option_expiration() {
     ApiLogger.setDebugEnabled(true);
     List<String> symbols = new ArrayList<>();
     symbols.add("AAPL");
@@ -46,7 +46,7 @@ public class OptionDemo {
   }
 
   @Test
-  public void getOptionBrief() {
+  public void option_brief() {
     OptionCommonModel model = new OptionCommonModel();
     model.setSymbol("AAPL");
     model.setRight("CALL");
@@ -61,7 +61,7 @@ public class OptionDemo {
   }
 
   @Test
-  public void getOptionChain() {
+  public void option_chain() {
     OptionChainModel model = new OptionChainModel();
     model.setSymbol("AAPL");
     model.setExpiry("2019-01-11");
@@ -75,7 +75,7 @@ public class OptionDemo {
   }
 
   @Test
-  public void getOptionKline() {
+  public void option_kline() {
     OptionKlineModel model = new OptionKlineModel();
     model.setSymbol("BABA");
     model.setRight("CALL");
@@ -93,7 +93,7 @@ public class OptionDemo {
   }
 
   @Test
-  public void getOptionTradeTick() {
+  public void option_trade_tick() {
     OptionCommonModel model = new OptionCommonModel();
     model.setSymbol("AAPL");
     model.setRight("CALL");

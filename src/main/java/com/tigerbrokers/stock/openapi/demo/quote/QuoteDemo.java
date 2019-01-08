@@ -27,7 +27,7 @@ public class QuoteDemo {
   private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey, tigerPubKey);
 
   @Test
-  public void getMarket() {
+  public void market_state() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.MARKET_STATE);
     String bizContent = QuoteParamBuilder.instance()
         .market(Market.US)
@@ -39,7 +39,7 @@ public class QuoteDemo {
   }
 
   @Test
-  public void allSymbols() {
+  public void all_symbols() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ALL_SYMBOLS);
 
     String bizContent = QuoteParamBuilder.instance()
@@ -52,7 +52,7 @@ public class QuoteDemo {
   }
 
   @Test
-  public void allSymbolNames() {
+  public void all_symbol_names() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ALL_SYMBOL_NAMES);
 
     String bizContent = QuoteParamBuilder.instance()
@@ -66,7 +66,7 @@ public class QuoteDemo {
   }
 
   @Test
-  public void getStockBrief() {
+  public void brief() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.BRIEF);
 
     List<String> symbols = new ArrayList<>();
@@ -82,7 +82,7 @@ public class QuoteDemo {
   }
 
   @Test
-  public void getStockDetail() {
+  public void stock_detail() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.STOCK_DETAIL);
 
     List<String> symbols = new ArrayList<>();
@@ -100,7 +100,7 @@ public class QuoteDemo {
   }
 
   @Test
-  public void getTimeline() {
+  public void timeline() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.TIMELINE);
 
     String bizContent = QuoteParamBuilder.instance()
@@ -117,7 +117,7 @@ public class QuoteDemo {
   }
 
   @Test
-  public void getHourTradingTimeline() {
+  public void hour_trading_timeline() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.HOUR_TRADING_TIMELINE);
 
     String bizContent = QuoteParamBuilder.instance()
@@ -133,7 +133,7 @@ public class QuoteDemo {
   }
 
   @Test
-  public void getKline() {
+  public void kline() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.KLINE);
 
     String bizContent = QuoteParamBuilder.instance()
@@ -151,7 +151,7 @@ public class QuoteDemo {
   }
 
   @Test
-  public void getTradeTick() {
+  public void trade_tick() {
     TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.TRADE_TICK);
 
     List<String> symbols = new ArrayList<>();
