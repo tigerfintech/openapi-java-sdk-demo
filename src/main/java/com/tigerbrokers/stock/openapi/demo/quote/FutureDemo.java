@@ -19,7 +19,9 @@ import com.tigerbrokers.stock.openapi.client.https.response.future.FutureTickRes
 import com.tigerbrokers.stock.openapi.client.https.response.future.FutureTradingDateResponse;
 import com.tigerbrokers.stock.openapi.client.struct.enums.FutureKType;
 import com.tigerbrokers.stock.openapi.client.struct.enums.SecType;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
 
 import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
@@ -66,21 +68,30 @@ public class FutureDemo {
 
   @Test
   public void get_future_kline() {
+    List<String> contractCodes = new ArrayList<>();
+    contractCodes.add("CL1902");
+
     FutureKlineResponse response = client.execute(
-        FutureKlineRequest.newRequest("CL1902", FutureKType.min15, 1545634249489L,
-            1545807049489L));
+        FutureKlineRequest.newRequest(contractCodes, FutureKType.min15, 1535634249489L,
+            1538807049489L, 200));
     System.out.println(response.getFutureKlineItems());
   }
 
   @Test
   public void get_future_real_time_quote() {
-    FutureRealTimeQuoteResponse response = client.execute(FutureRealTimeQuoteRequest.newRequest("CL1902"));
-    System.out.println(response.getFutureRealTimeItem());
+    List<String> contractCodes = new ArrayList<>();
+    contractCodes.add("CL1902");
+
+    FutureRealTimeQuoteResponse response = client.execute(FutureRealTimeQuoteRequest.newRequest(contractCodes));
+    System.out.println(response.getFutureRealTimeItems());
   }
 
   @Test
   public void get_future_tick() {
-    FutureTickResponse response = client.execute(FutureTickRequest.newRequest("CL1902", 0, 1000));
+    List<String> contractCodes = new ArrayList<>();
+    contractCodes.add("CL1902");
+
+    FutureTickResponse response = client.execute(FutureTickRequest.newRequest(contractCodes, 0, 1000));
     System.out.println(response.getFutureTickItems());
   }
 
