@@ -130,7 +130,7 @@ public class QuoteV2Demo {
     symbols.add("AAPL");
     QuoteContractResponse response = client.execute(QuoteContractRequest.newRequest(symbols, SecType.WAR));
     if (response.isSuccess()) {
-      System.out.println(response.getContractItem());
+      System.out.println(response.getContractItems());
     } else {
       System.out.println("response error:" + response.getMessage());
     }
