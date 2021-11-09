@@ -58,13 +58,13 @@ public class DefaultApiComposeCallback implements ApiComposeCallback {
   }
 
   @Override
-  public void subscribeEnd(JSONObject jsonObject) {
-    System.out.println("subscribe end:" + jsonObject.toJSONString());
+  public void subscribeEnd(String id, String subject, JSONObject jsonObject) {
+    System.out.println("subscribe " + subject + " end. id:" + id + ", " + jsonObject.toJSONString());
   }
 
   @Override
-  public void cancelSubscribeEnd(JSONObject jsonObject) {
-    System.out.println("cancel subscribe end:" + jsonObject.toJSONString());
+  public void cancelSubscribeEnd(String id, String subject, JSONObject jsonObject) {
+    System.out.println("cancel subscribe " + subject + " end. id:" + id + ", " + jsonObject.toJSONString());
   }
 
   @Override
@@ -85,6 +85,11 @@ public class DefaultApiComposeCallback implements ApiComposeCallback {
   @Override
   public void connectionClosed() {
     System.out.println("connection closed.");
+  }
+
+  @Override
+  public void connectionKickoff(int errorCode, String errorMsg) {
+    System.out.println(errorMsg + " and the connection is closed.");
   }
 
   @Override

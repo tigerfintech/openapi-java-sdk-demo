@@ -1,41 +1,44 @@
 package com.tigerbrokers.stock.openapi.demo.trade;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tigerbrokers.stock.openapi.client.constant.ApiServiceType;
 import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
+import com.tigerbrokers.stock.openapi.client.https.domain.ApiModel;
+import com.tigerbrokers.stock.openapi.client.https.domain.contract.model.ContractModel;
 import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
+import com.tigerbrokers.stock.openapi.client.https.request.contract.ContractRequest;
 import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
+import com.tigerbrokers.stock.openapi.client.https.response.TigerResponse;
+import com.tigerbrokers.stock.openapi.client.https.response.contract.ContractResponse;
 import com.tigerbrokers.stock.openapi.client.struct.enums.Currency;
 import com.tigerbrokers.stock.openapi.client.struct.enums.Market;
 import com.tigerbrokers.stock.openapi.client.struct.enums.OrderStatus;
 import com.tigerbrokers.stock.openapi.client.struct.enums.SecType;
 import com.tigerbrokers.stock.openapi.client.util.builder.AccountParamBuilder;
+import com.tigerbrokers.stock.openapi.demo.TigerOpenClientConfig;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
  * Created by lijiawen on 2018/07/06.
  */
 public class AccountDemo {
-
-  private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey);
+  private static TigerHttpClient client = new TigerHttpClient(TigerOpenClientConfig.getDefaultClientConfig());
 
   @Test
   public void queryContract() {
-    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.CONTRACT);
-    String bizContent = AccountParamBuilder.instance()
-        .account("DU575569")
-        .conid("42451645")
-        .buildJson();
-    request.setBizContent(bizContent);
-
-    TigerHttpResponse response = client.execute(request);
-    outputResponse(bizContent, response);
+    // use default account
+    ContractRequest contractRequest = ContractRequest.newRequest(
+        new ContractModel("AAPL"));
+    ContractResponse contractResponse = client.execute(contractRequest);
+    outputResponse(contractRequest.getApiModel(), contractResponse);
+    // use account parameter
+    contractRequest = ContractRequest.newRequest(
+        new ContractModel("AAPL"), "402901");
+    contractResponse = client.execute(contractRequest);
+    outputResponse(contractRequest.getApiModel(), contractResponse);
   }
 
   @Test
@@ -106,6 +109,16 @@ public class AccountDemo {
       System.out.println("request success,param:" + param + ",result:" + response);
     } else {
       System.out.println("request failure,param:" + param);
+    }
+  }
+
+  private void outputResponse(ApiModel model, TigerResponse response) {
+    if (response != null) {
+      System.out.println("request " + response.getMessage()
+          + ",param:" + JSONObject.toJSONString(model)
+          + ",result:" + JSONObject.toJSONString(response));
+    } else {
+      System.out.println("request failure,param:" + model);
     }
   }
 }
