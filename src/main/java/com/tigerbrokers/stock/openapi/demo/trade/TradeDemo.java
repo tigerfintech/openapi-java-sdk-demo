@@ -7,11 +7,14 @@ import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
 import com.tigerbrokers.stock.openapi.client.https.domain.ApiModel;
 import com.tigerbrokers.stock.openapi.client.https.domain.contract.item.ContractItem;
 import com.tigerbrokers.stock.openapi.client.https.domain.contract.model.ContractModel;
+import com.tigerbrokers.stock.openapi.client.https.domain.future.item.FutureContractItem;
 import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.contract.ContractRequest;
+import com.tigerbrokers.stock.openapi.client.https.request.future.FutureCurrentContractRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.trade.TradeOrderRequest;
 import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.contract.ContractResponse;
+import com.tigerbrokers.stock.openapi.client.https.response.future.FutureContractResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.trade.TradeOrderResponse;
 import com.tigerbrokers.stock.openapi.client.struct.TagValue;
 import com.tigerbrokers.stock.openapi.client.struct.enums.ActionType;
@@ -379,29 +382,14 @@ public class TradeDemo {
 
   @Test
   public void placeFutOrder() {
-    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.PLACE_ORDER);
+    FutureContractResponse futureResponse = client.execute(FutureCurrentContractRequest.newRequest("CL"));
+    FutureContractItem futureContractItem = futureResponse.getFutureContractItem();
+    ContractItem contract = ContractItem.convert(futureContractItem);
 
-    String bizContent = TradeParamBuilder.instance()
-        .account("DU575569")
-        .orderId(getOrderNo())
-        .symbol("NG")
-        .secType(SecType.FUT)
-        .market(Market.US)
-        .currency(Currency.USD)
-        .action(ActionType.BUY)
-        .orderType(OrderType.LMT)
-        .expiry("20301126")
-        .multiplier(10000f)
-        .exchange("NYMEX")
-        .limitPrice(9.0)
-        .totalQuantity(10)
-        .timeInForce(TimeInForce.DAY)
-        .outsideRth(false)
-        .buildJson();
-
-    request.setBizContent(bizContent);
-    TigerHttpResponse response = client.execute(request);
-    outputResponse(bizContent, response);
+    TradeOrderRequest request = TradeOrderRequest.buildLimitOrder(
+        contract, ActionType.BUY, 1, 0.1d);
+    TradeOrderResponse response = client.execute(request);
+    outputResponse(request.getApiModel(), response);
   }
 
   @Test
