@@ -19,14 +19,11 @@ import com.tigerbrokers.stock.openapi.client.https.response.future.FutureTickRes
 import com.tigerbrokers.stock.openapi.client.https.response.future.FutureTradingDateResponse;
 import com.tigerbrokers.stock.openapi.client.struct.enums.FutureKType;
 import com.tigerbrokers.stock.openapi.client.struct.enums.SecType;
+import com.tigerbrokers.stock.openapi.demo.TigerOpenClientConfig;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
-
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
@@ -34,7 +31,7 @@ import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
  */
 public class FutureDemo {
 
-  private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey);
+  private static TigerHttpClient client = new TigerHttpClient(TigerOpenClientConfig.getDefaultClientConfig());
 
   @Test
   public void get_future_exchange() {

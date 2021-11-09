@@ -37,6 +37,7 @@ import org.junit.Test;
  * Created by lijiawen on 2018/05/31.
  */
 public class TradeDemo {
+
   private static TigerHttpClient client = new TigerHttpClient(TigerOpenClientConfig.getDefaultClientConfig());
 
   public ContractItem getStockContact() {

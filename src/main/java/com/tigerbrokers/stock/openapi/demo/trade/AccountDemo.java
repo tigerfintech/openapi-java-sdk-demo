@@ -25,6 +25,7 @@ import org.junit.Test;
  * Created by lijiawen on 2018/07/06.
  */
 public class AccountDemo {
+
   private static TigerHttpClient client = new TigerHttpClient(TigerOpenClientConfig.getDefaultClientConfig());
 
   @Test
