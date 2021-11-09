@@ -9,13 +9,10 @@ import com.tigerbrokers.stock.openapi.client.struct.enums.Language;
 import com.tigerbrokers.stock.openapi.client.struct.enums.Market;
 import com.tigerbrokers.stock.openapi.client.struct.enums.TimeLineType;
 import com.tigerbrokers.stock.openapi.client.util.builder.QuoteParamBuilder;
+import com.tigerbrokers.stock.openapi.demo.TigerOpenClientConfig;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
@@ -23,7 +20,7 @@ import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
  */
 public class QuoteDemo {
 
-  private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey);
+  private static TigerHttpClient client = new TigerHttpClient(TigerOpenClientConfig.getDefaultClientConfig());
 
   @Test
   public void market_state() {
