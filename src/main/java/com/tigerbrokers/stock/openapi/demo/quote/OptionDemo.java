@@ -47,8 +47,8 @@ public class OptionDemo {
     OptionCommonModel model = new OptionCommonModel();
     model.setSymbol("AAPL");
     model.setRight("CALL");
-    model.setStrike("95.0");
-    model.setExpiry("2019-01-11");
+    model.setStrike("150.0");
+    model.setExpiry("2021-11-19");
     OptionBriefResponse response = client.execute(OptionBriefQueryRequest.of(model));
     if (response.isSuccess()) {
       System.out.println(Arrays.toString(response.getOptionBriefItems().toArray()));
