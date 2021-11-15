@@ -15,14 +15,11 @@ import com.tigerbrokers.stock.openapi.client.https.response.option.OptionExpirat
 import com.tigerbrokers.stock.openapi.client.https.response.option.OptionKlineResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.option.OptionTradeTickResponse;
 import com.tigerbrokers.stock.openapi.client.util.ApiLogger;
+import com.tigerbrokers.stock.openapi.demo.TigerOpenClientConfig;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
-
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.serverUrl;
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.tigerId;
-import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
 
 /**
  * Description:
@@ -30,7 +27,7 @@ import static com.tigerbrokers.stock.openapi.demo.DemoConstants.yourPrivateKey;
  */
 public class OptionDemo {
 
-  private static TigerHttpClient client = new TigerHttpClient(serverUrl, tigerId, yourPrivateKey);
+  private static TigerHttpClient client = new TigerHttpClient(TigerOpenClientConfig.getDefaultClientConfig());
 
   @Test
   public void option_expiration() {
@@ -50,8 +47,8 @@ public class OptionDemo {
     OptionCommonModel model = new OptionCommonModel();
     model.setSymbol("AAPL");
     model.setRight("CALL");
-    model.setStrike("95.0");
-    model.setExpiry("2019-01-11");
+    model.setStrike("150.0");
+    model.setExpiry("2021-11-19");
     OptionBriefResponse response = client.execute(OptionBriefQueryRequest.of(model));
     if (response.isSuccess()) {
       System.out.println(Arrays.toString(response.getOptionBriefItems().toArray()));
