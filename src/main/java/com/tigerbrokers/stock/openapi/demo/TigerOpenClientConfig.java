@@ -1,8 +1,11 @@
 package com.tigerbrokers.stock.openapi.demo;
 
 import com.tigerbrokers.stock.openapi.client.config.ClientConfig;
-import java.util.HashMap;
-import java.util.Map;
+import com.tigerbrokers.stock.openapi.client.struct.enums.Language;
+import com.tigerbrokers.stock.openapi.client.struct.enums.License;
+import com.tigerbrokers.stock.openapi.client.struct.enums.TimeZoneId;
+import com.tigerbrokers.stock.openapi.client.util.ApiLogger;
+import com.tigerbrokers.stock.openapi.client.util.FileUtil;
 
 /**
  * @author liutongping
@@ -12,15 +15,18 @@ import java.util.Map;
  */
 public class TigerOpenClientConfig {
   static {
+    ApiLogger.setEnabled(true, "/data0/logs/");
     ClientConfig clientConfig = ClientConfig.DEFAULT_CONFIG;
-    //clientConfig.serverUrl = "https://openapi.itiger.com/gateway";
-    //clientConfig.socketServerUrl = "wss://openapi.itiger.com:8887/stomp";
-    clientConfig.tigerId = "your_tigerId";
-    clientConfig.defaultAccount = "default_account";
-    clientConfig.privateKey = clientConfig.readPrivateKey("/Users/tiger/.ssh/rsa_public_key_test.pem");
-    //clientConfig.privateKey = "your_private_key";
-    clientConfig.secretKey = "xxxxxx";
+    clientConfig.configFilePath = "/data0/tiger_config";
+    //clientConfig.isSslSocket = true;
+    //clientConfig.isAutoGrabPermission = true;
+    //clientConfig.isAutoRefreshToken = true;
+    //clientConfig.timeZone = TimeZoneId.Shanghai;
+    //clientConfig.language = Language.en_US;
+    //clientConfig.privateKey = FileUtil.readPrivateKey("/Users/tiger/.ssh/rsa_private_key_test.pem");
+    //clientConfig.secretKey = "xxxxxx";
   }
+
   public static ClientConfig getDefaultClientConfig() {
     return ClientConfig.DEFAULT_CONFIG;
   }

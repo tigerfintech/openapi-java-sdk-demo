@@ -1,24 +1,25 @@
 package com.tigerbrokers.stock.openapi.demo.trade;
 
-import com.alibaba.fastjson.JSONObject;
-import com.tigerbrokers.stock.openapi.client.constant.ApiServiceType;
+import com.tigerbrokers.stock.openapi.client.config.ClientConfig;
 import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
-import com.tigerbrokers.stock.openapi.client.https.domain.ApiModel;
+import com.tigerbrokers.stock.openapi.client.https.domain.contract.item.ContractItem;
 import com.tigerbrokers.stock.openapi.client.https.domain.contract.model.ContractModel;
+import com.tigerbrokers.stock.openapi.client.https.domain.trade.item.PrimeAssetItem;
 import com.tigerbrokers.stock.openapi.client.https.request.TigerHttpRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.contract.ContractRequest;
+import com.tigerbrokers.stock.openapi.client.https.request.trade.PrimeAssetRequest;
 import com.tigerbrokers.stock.openapi.client.https.response.TigerHttpResponse;
-import com.tigerbrokers.stock.openapi.client.https.response.TigerResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.contract.ContractResponse;
+import com.tigerbrokers.stock.openapi.client.https.response.trade.PrimeAssetResponse;
 import com.tigerbrokers.stock.openapi.client.struct.enums.Currency;
 import com.tigerbrokers.stock.openapi.client.struct.enums.Market;
+import com.tigerbrokers.stock.openapi.client.struct.enums.MethodName;
 import com.tigerbrokers.stock.openapi.client.struct.enums.OrderStatus;
 import com.tigerbrokers.stock.openapi.client.struct.enums.SecType;
 import com.tigerbrokers.stock.openapi.client.util.builder.AccountParamBuilder;
 import com.tigerbrokers.stock.openapi.demo.TigerOpenClientConfig;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
 
 /**
  * Description:
@@ -26,100 +27,82 @@ import org.junit.Test;
  */
 public class AccountDemo {
 
-  private static TigerHttpClient client = new TigerHttpClient(TigerOpenClientConfig.getDefaultClientConfig());
+  private static ClientConfig clientConfig = TigerOpenClientConfig.getDefaultClientConfig();
+  private static TigerHttpClient client = TigerHttpClient.getInstance().clientConfig(clientConfig);
 
-  @Test
-  public void queryContract() {
-    // use default account
-    ContractRequest contractRequest = ContractRequest.newRequest(
-        new ContractModel("AAPL"));
+  public ContractItem getContract(String symbol) {
+    ContractRequest contractRequest = ContractRequest.newRequest(new ContractModel(symbol));
     ContractResponse contractResponse = client.execute(contractRequest);
-    outputResponse(contractRequest.getApiModel(), contractResponse);
-    // use account parameter
-    contractRequest = ContractRequest.newRequest(
-        new ContractModel("AAPL"), "402901");
-    contractResponse = client.execute(contractRequest);
-    outputResponse(contractRequest.getApiModel(), contractResponse);
+    return contractResponse.getItem();
   }
 
-  @Test
-  public void queryAccount() {
-    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ACCOUNTS);
+  public String getAccountInfo(String account) {
+    TigerHttpRequest request = new TigerHttpRequest(MethodName.ACCOUNTS);
     String bizContent = AccountParamBuilder.instance()
-        .account("DU575569")
+        .account(account)
         .buildJson();
     request.setBizContent(bizContent);
 
     TigerHttpResponse response = client.execute(request);
-    outputResponse(bizContent, response);
+    return response.getData();
   }
 
-  @Test
-  public void queryAsset() {
-    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ASSETS);
+  public PrimeAssetItem getAsset(String account, Currency baseCurrency) {
+    PrimeAssetRequest assetRequest = PrimeAssetRequest.buildPrimeAssetRequest(account, baseCurrency);
+    PrimeAssetResponse primeAssetResponse = client.execute(assetRequest);
+    return primeAssetResponse.getItem();
+  }
+
+  public String getGlobalAccountAsset(String account) {
+    TigerHttpRequest request = new TigerHttpRequest(MethodName.ASSETS);
     String bizContent = AccountParamBuilder.instance()
-        .account("DU575569")
+        .account(account)
         .buildJson();
     request.setBizContent(bizContent);
 
     TigerHttpResponse response = client.execute(request);
-    outputResponse(bizContent, response);
+    return response.getData();
   }
 
-  @Test
-  public void queryPosition() {
-    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.POSITIONS);
-
+  public String queryPosition(String account, String symbol, Market market, SecType secType, Currency currency) {
+    TigerHttpRequest request = new TigerHttpRequest(MethodName.POSITIONS);
     String bizContent = AccountParamBuilder.instance()
-        .account("DU575569")
-        .currency(Currency.USD)
-        .market(Market.US)
-        .symbol("AAPL")
-        .secType(SecType.STK)
+        .account(account)
+        .currency(currency)
+        .market(market)
+        .symbol(symbol)
+        .secType(secType)
         .buildJson();
     request.setBizContent(bizContent);
 
     TigerHttpResponse response = client.execute(request);
-    outputResponse(bizContent, response);
+    return response.getData();
   }
 
-  @Test
-  public void getOrders() {
-    TigerHttpRequest request = new TigerHttpRequest(ApiServiceType.ORDERS);
+  public String getOrders(String account, String beginDate, String endDate, SecType secType, Market market) {
+    TigerHttpRequest request = new TigerHttpRequest(MethodName.ORDERS);
     List<String> states = new ArrayList<>();
     states.add(OrderStatus.Submitted.name());
     states.add(OrderStatus.Filled.name());
 
     String bizContent = AccountParamBuilder.instance()
-        .account("DU575569")
-        .startDate("2018-07-21")
-        .endDate("2018-11-28")
-        .secType(SecType.STK)
-        .market(Market.US)
+        .account(account)
+        .startDate(beginDate)
+        .endDate(endDate)
+        .secType(secType)
+        .market(market)
         .states(states)
         .isBrief(false)
         .buildJson();
     request.setBizContent(bizContent);
 
     TigerHttpResponse response = client.execute(request);
-    outputResponse(bizContent, response);
+    return response.getData();
   }
 
-  private void outputResponse(String param, TigerHttpResponse response) {
-    if (response != null) {
-      System.out.println("request success,param:" + param + ",result:" + response);
-    } else {
-      System.out.println("request failure,param:" + param);
-    }
-  }
-
-  private void outputResponse(ApiModel model, TigerResponse response) {
-    if (response != null) {
-      System.out.println("request " + response.getMessage()
-          + ",param:" + JSONObject.toJSONString(model)
-          + ",result:" + JSONObject.toJSONString(response));
-    } else {
-      System.out.println("request failure,param:" + model);
-    }
+  public static void main(String[] args) {
+    AccountDemo accountDemo = new AccountDemo();
+    PrimeAssetItem asset = accountDemo.getAsset(clientConfig.defaultAccount, Currency.USD);
+    System.out.println(asset.getSegments().get(0).getCurrency());
   }
 }

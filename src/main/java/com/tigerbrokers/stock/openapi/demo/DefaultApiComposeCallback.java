@@ -2,7 +2,17 @@ package com.tigerbrokers.stock.openapi.demo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tigerbrokers.stock.openapi.client.socket.ApiComposeCallback;
+import com.tigerbrokers.stock.openapi.client.socket.data.TradeTick;
+import com.tigerbrokers.stock.openapi.client.socket.data.pb.AssetData;
+import com.tigerbrokers.stock.openapi.client.socket.data.pb.OrderStatusData;
+import com.tigerbrokers.stock.openapi.client.socket.data.pb.OrderTransactionData;
+import com.tigerbrokers.stock.openapi.client.socket.data.pb.PositionData;
+import com.tigerbrokers.stock.openapi.client.socket.data.pb.QuoteBBOData;
+import com.tigerbrokers.stock.openapi.client.socket.data.pb.QuoteBasicData;
+import com.tigerbrokers.stock.openapi.client.socket.data.pb.QuoteDepthData;
 import com.tigerbrokers.stock.openapi.client.struct.SubscribedSymbol;
+import com.tigerbrokers.stock.openapi.client.util.ApiLogger;
+import com.tigerbrokers.stock.openapi.client.util.ProtoMessageUtil;
 
 /**
  * Description:
@@ -11,95 +21,105 @@ import com.tigerbrokers.stock.openapi.client.struct.SubscribedSymbol;
 public class DefaultApiComposeCallback implements ApiComposeCallback {
 
   @Override
-  public void orderStatusChange(JSONObject jsonObject) {
-    StringBuilder builder = new StringBuilder();
-    for (String key : jsonObject.keySet()) {
-      builder.append(key).append("=").append(jsonObject.get(key)).append("|");
-    }
-    System.out.println("order change:" + builder);
+  public void orderStatusChange(OrderStatusData data) {
+    ApiLogger.info("orderStatusChange:" + ProtoMessageUtil.toJson(data));
   }
 
   @Override
-  public void positionChange(JSONObject jsonObject) {
-    StringBuilder builder = new StringBuilder();
-    for (String key : jsonObject.keySet()) {
-      builder.append(key).append("=").append(jsonObject.get(key)).append("|");
-    }
-    System.out.println("position change:" + builder);
+  public void orderTransactionChange(OrderTransactionData data) {
+    ApiLogger.info("orderTransactionChange:" + ProtoMessageUtil.toJson(data));
   }
 
   @Override
-  public void assetChange(JSONObject jsonObject) {
-    StringBuilder builder = new StringBuilder();
-    for (String key : jsonObject.keySet()) {
-      builder.append(key).append("=").append(jsonObject.get(key)).append("|");
-    }
-    System.out.println("asset change:" + builder);
+  public void positionChange(PositionData data) {
+    ApiLogger.info("positionChange:" + ProtoMessageUtil.toJson(data));
   }
 
   @Override
-  public void quoteChange(JSONObject jsonObject) {
-    System.out.println("quoteChange:" + jsonObject.toJSONString());
+  public void assetChange(AssetData data) {
+    ApiLogger.info("assetChange:" + ProtoMessageUtil.toJson(data));
   }
 
   @Override
-  public void optionChange(JSONObject jsonObject) {
-
+  public void quoteChange(QuoteBasicData data) {
+    ApiLogger.info("quoteChange:" + ProtoMessageUtil.toJson(data));
+  }
+  @Override
+  public void quoteAskBidChange(QuoteBBOData data) {
+    ApiLogger.info("quoteAskBidChange:" + ProtoMessageUtil.toJson(data));
   }
 
   @Override
-  public void futureChange(JSONObject jsonObject) {
-
+  public void tradeTickChange(TradeTick data) {
+    ApiLogger.info("tradeTickChange:" + JSONObject.toJSONString(data));
   }
 
   @Override
-  public void depthQuoteChange(JSONObject jsonObject) {
-
+  public void optionChange(QuoteBasicData data) {
+    ApiLogger.info("optionChange:" + ProtoMessageUtil.toJson(data));
+  }
+  @Override
+  public void optionAskBidChange(QuoteBBOData data) {
+    ApiLogger.info("optionAskBidChange:" + ProtoMessageUtil.toJson(data));
   }
 
   @Override
-  public void subscribeEnd(String id, String subject, JSONObject jsonObject) {
-    System.out.println("subscribe " + subject + " end. id:" + id + ", " + jsonObject.toJSONString());
+  public void futureChange(QuoteBasicData data) {
+    ApiLogger.info("futureChange:" + ProtoMessageUtil.toJson(data));
+  }
+  @Override
+  public void futureAskBidChange(QuoteBBOData data) {
+    ApiLogger.info("futureAskBidChange:" + ProtoMessageUtil.toJson(data));
   }
 
   @Override
-  public void cancelSubscribeEnd(String id, String subject, JSONObject jsonObject) {
-    System.out.println("cancel subscribe " + subject + " end. id:" + id + ", " + jsonObject.toJSONString());
+  public void depthQuoteChange(QuoteDepthData data) {
+    ApiLogger.info("depthQuoteChange:" + ProtoMessageUtil.toJson(data));
+  }
+
+  @Override
+  public void subscribeEnd(int id, String subject, String result) {
+    ApiLogger.info("subscribe " + subject + " end. id:" + id + ", " + result);
+  }
+
+  @Override
+  public void cancelSubscribeEnd(int id, String subject, String result) {
+    ApiLogger.info("cancel subscribe " + subject + " end. id:" + id + ", " + result);
   }
 
   @Override
   public void getSubscribedSymbolEnd(SubscribedSymbol subscribedSymbol) {
-    System.out.println(JSONObject.toJSONString(subscribedSymbol));
+    ApiLogger.info(JSONObject.toJSONString(subscribedSymbol));
   }
 
   @Override
   public void error(String errorMsg) {
-    System.out.println("receive error:" + errorMsg);
+    ApiLogger.error("receive error:" + errorMsg);
   }
 
   @Override
   public void error(int id, int errorCode, String errorMsg) {
-    System.out.println("receive error id:" + id + ",errorCode:" + errorCode + ",errorMsg:" + errorMsg);
+    ApiLogger.error("receive error id:" + id + ",errorCode:" + errorCode + ",errorMsg:" + errorMsg);
   }
 
   @Override
   public void connectionClosed() {
-    System.out.println("connection closed.");
+    ApiLogger.info("connection closed.");
   }
 
   @Override
-  public void connectionKickoff(int errorCode, String errorMsg) {
-    System.out.println(errorMsg + " and the connection is closed.");
+  public void connectionKickout(int errorCode, String errorMsg) {
+    ApiLogger.info(errorMsg + " and the connection is closed.");
   }
 
   @Override
   public void connectionAck() {
-    System.out.println("connect ack.");
+    ApiLogger.info("connect ack.");
   }
 
   @Override
   public void connectionAck(int i, int i1) {
-
+    ApiLogger.info("connect ack. sendInterval:{}, serverReceiveInterval:{}", i, i1);
   }
 
   @Override

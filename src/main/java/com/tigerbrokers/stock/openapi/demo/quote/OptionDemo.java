@@ -1,25 +1,37 @@
 package com.tigerbrokers.stock.openapi.demo.quote;
 
 import com.tigerbrokers.stock.openapi.client.https.client.TigerHttpClient;
+import com.tigerbrokers.stock.openapi.client.https.domain.option.item.OptionBriefItem;
+import com.tigerbrokers.stock.openapi.client.https.domain.option.item.OptionChainItem;
+import com.tigerbrokers.stock.openapi.client.https.domain.option.item.OptionExpirationItem;
+import com.tigerbrokers.stock.openapi.client.https.domain.option.item.OptionKlineItem;
+import com.tigerbrokers.stock.openapi.client.https.domain.option.item.OptionTradeTickItem;
+import com.tigerbrokers.stock.openapi.client.https.domain.option.item.WarrantFilterItem;
+import com.tigerbrokers.stock.openapi.client.https.domain.option.item.WarrantQuoteItem;
 import com.tigerbrokers.stock.openapi.client.https.domain.option.model.OptionChainModel;
 import com.tigerbrokers.stock.openapi.client.https.domain.option.model.OptionCommonModel;
 import com.tigerbrokers.stock.openapi.client.https.domain.option.model.OptionKlineModel;
+import com.tigerbrokers.stock.openapi.client.https.domain.quote.item.ContractItem;
 import com.tigerbrokers.stock.openapi.client.https.request.option.OptionBriefQueryRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.option.OptionChainQueryRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.option.OptionExpirationQueryRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.option.OptionKlineQueryRequest;
 import com.tigerbrokers.stock.openapi.client.https.request.option.OptionTradeTickQueryRequest;
+import com.tigerbrokers.stock.openapi.client.https.request.option.WarrantFilterRequest;
+import com.tigerbrokers.stock.openapi.client.https.request.option.WarrantQuoteRequest;
+import com.tigerbrokers.stock.openapi.client.https.request.quote.QuoteContractRequest;
 import com.tigerbrokers.stock.openapi.client.https.response.option.OptionBriefResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.option.OptionChainResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.option.OptionExpirationResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.option.OptionKlineResponse;
 import com.tigerbrokers.stock.openapi.client.https.response.option.OptionTradeTickResponse;
-import com.tigerbrokers.stock.openapi.client.util.ApiLogger;
+import com.tigerbrokers.stock.openapi.client.https.response.option.WarrantFilterResponse;
+import com.tigerbrokers.stock.openapi.client.https.response.option.WarrantQuoteResponse;
+import com.tigerbrokers.stock.openapi.client.https.response.quote.QuoteContractResponse;
+import com.tigerbrokers.stock.openapi.client.struct.enums.SecType;
+import com.tigerbrokers.stock.openapi.client.struct.enums.WarrantType;
 import com.tigerbrokers.stock.openapi.demo.TigerOpenClientConfig;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
 
 /**
  * Description:
@@ -27,81 +39,77 @@ import org.junit.Test;
  */
 public class OptionDemo {
 
-  private static TigerHttpClient client = new TigerHttpClient(TigerOpenClientConfig.getDefaultClientConfig());
+  private static TigerHttpClient client =
+      TigerHttpClient.getInstance().clientConfig(TigerOpenClientConfig.getDefaultClientConfig());
 
-  @Test
-  public void option_expiration() {
-    ApiLogger.setDebugEnabled(true);
-    List<String> symbols = new ArrayList<>();
-    symbols.add("AAPL");
+  public List<OptionExpirationItem>  getOptionExpiration(List<String> symbols) {
     OptionExpirationResponse response = client.execute(new OptionExpirationQueryRequest(symbols));
-    if (response.isSuccess()) {
-      System.out.println(Arrays.toString(response.getOptionExpirationItems().toArray()));
-    } else {
-      System.out.println("response error:" + response.getMessage());
-    }
+    return response.getOptionExpirationItems();
   }
 
-  @Test
-  public void option_brief() {
+  public List<OptionBriefItem> getOptionBrief(String symbol,String optionRight,String strike,String expiry) {
     OptionCommonModel model = new OptionCommonModel();
-    model.setSymbol("AAPL");
-    model.setRight("CALL");
-    model.setStrike("150.0");
-    model.setExpiry("2021-11-19");
+    model.setSymbol(symbol);
+    model.setRight(optionRight);
+    model.setStrike(strike);
+    model.setExpiry(expiry);
     OptionBriefResponse response = client.execute(OptionBriefQueryRequest.of(model));
-    if (response.isSuccess()) {
-      System.out.println(Arrays.toString(response.getOptionBriefItems().toArray()));
-    } else {
-      System.out.println("response error:" + response.getMessage());
-    }
+    return response.getOptionBriefItems();
   }
 
-  @Test
-  public void option_chain() {
+  public List<OptionChainItem>  getOptionChain(String symbol,String expiry) {
     OptionChainModel model = new OptionChainModel();
-    model.setSymbol("AAPL");
-    model.setExpiry("2019-01-11");
+    model.setSymbol(symbol);
+    model.setExpiry(expiry);
 
     OptionChainResponse response = client.execute(OptionChainQueryRequest.of(model));
-    if (response.isSuccess()) {
-      System.out.println(Arrays.toString(response.getOptionChainItems().toArray()));
-    } else {
-      System.out.println("response error:" + response.getMessage());
-    }
+    return response.getOptionChainItems();
   }
 
-  @Test
-  public void option_kline() {
+  public List<OptionKlineItem>  getOptionKline(String symbol,String optionRight,String strike,String expiry,String beginTime,String endTime) {
     OptionKlineModel model = new OptionKlineModel();
-    model.setSymbol("BABA");
-    model.setRight("CALL");
-    model.setStrike("129.0");
-    model.setExpiry("2019-01-04");
-    model.setBeginTime("2018-12-10");
-    model.setEndTime("2019-12-26");
+    model.setSymbol(symbol);
+    model.setRight(optionRight);
+    model.setStrike(strike);
+    model.setExpiry(expiry);
+    model.setBeginTime(beginTime);
+    model.setEndTime(endTime);
 
     OptionKlineResponse response = client.execute(OptionKlineQueryRequest.of(model));
-    if (response.isSuccess()) {
-      System.out.println(Arrays.toString(response.getKlineItems().toArray()));
-    } else {
-      System.out.println("response error:" + response.getMessage());
-    }
+    return response.getKlineItems();
   }
 
-  @Test
-  public void option_trade_tick() {
+  public List<OptionTradeTickItem>  getOptionTradeTick(String symbol,String optionRight,String strike,String expiry) {
     OptionCommonModel model = new OptionCommonModel();
-    model.setSymbol("AAPL");
-    model.setRight("CALL");
-    model.setStrike("95.0");
-    model.setExpiry("2019-01-11");
+    model.setSymbol(symbol);
+    model.setRight(optionRight);
+    model.setStrike(strike);
+    model.setExpiry(expiry);
 
     OptionTradeTickResponse response = client.execute(OptionTradeTickQueryRequest.of(model));
+    return response.getOptionTradeTickItems();
+  }
+
+  public List<ContractItem> getQuoteOptionContract(String symbol, String expiry) {
+    QuoteContractResponse response = client.execute(QuoteContractRequest.newRequest(symbol, SecType.OPT, expiry));
+    return response.getContractItems();
+  }
+
+  public WarrantFilterItem getWarrantsAndCBBC(String symbol,
+      WarrantType type, String issuerName) {
+    WarrantFilterRequest request = WarrantFilterRequest.newRequest(symbol);
+    request.warrantType(type);
+    request.issuerName(issuerName);
+    WarrantFilterResponse response = client.execute(request);
     if (response.isSuccess()) {
-      System.out.println(Arrays.toString(response.getOptionTradeTickItems().toArray()));
-    } else {
-      System.out.println("response error:" + response.getMessage());
+      return response.getItem();
     }
+    return null;
+  }
+
+  public WarrantQuoteItem getWarrantQuote(List<String> symbols) {
+    WarrantQuoteRequest request = WarrantQuoteRequest.newRequest(symbols);
+    WarrantQuoteResponse response = client.execute(request);
+    return response.getItem();
   }
 }
